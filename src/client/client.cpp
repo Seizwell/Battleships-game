@@ -11,8 +11,9 @@
 #include <term.h>
 #include <time.h>
 
-#include "plansza.h"
-#include "gra.h"
+#include "../common/gra.h"
+#include "../common/plansza.h"
+
 
 int main(){
     char o,p,n;
@@ -47,7 +48,6 @@ int main(){
             T1.los1(T1.T);
             T2.los1(T2.T);
         }
-        G1.ID();
     }
 
         cout << "\033[2J\033[1;1H";
@@ -63,7 +63,9 @@ int main(){
         T1.piszT(T1.P);
         cout<<endl<<"Plansza statkow:"<<endl;
         T1.piszT(T1.T);
-        G1.Strzal(T2.T,T1.P);
+        a=cin.get();
+        b=cin.get();
+        G1.Strzal(T2.T,T1.P,a,b);
 
         cin.ignore();
         cout<< "Niech przygotuje sie kolejny gracz"<<endl;
@@ -76,7 +78,9 @@ int main(){
         T2.piszT(T2.P);
         cout<<endl<<"Plansza statkow:"<<endl;
         T2.piszT(T2.T);
-        G1.Strzal(T1.T,T2.P);
+        a=cin.get();
+        b=cin.get();
+        G1.Strzal(T1.T,T2.P,a,b);
 
         a=T1.SprawdzT(T1.T);
         b=T2.SprawdzT(T2.T);
