@@ -1,107 +1,36 @@
 #include <iostream>
-#include <iomanip>
-#include <cstdlib>
-#include <cstdio>
-#include <cctype>
-#include <cmath>
-#include <string>
-#include <ctime>
-#include <fstream>
-#include <unistd.h>
-#include <term.h>
-#include <time.h>
 
-#include "../common/gra.h"
-#include "../common/plansza.h"
+#include "localgame.h"
 
 
 int main(){
-    char o,p,n;
-    int a,b;
-
-    Plansza T1;
-    Plansza T2;
-
-    Gra G1;
-
-    cout<<"Chcesz kontynuowac poprzednia gre czy zaczac nowa? Wpisz P dla poprzedniej lub N dla nowej: ";
-    p=toupper(cin.get());
-    cout<<"\n";
-    if(p=='P'){
-        G1.wczytajT(T1.T,T2.T,T1.P,T2.P);
+    cout << "=== STATKI ===" << endl;
+    cout << "1. Gra lokalna (2 graczy na zmianę)" << endl;
+    cout << "2. Gra przez sieć (multiplayer)" << endl;
+    cout << "3. Wyjście" << endl;
+    cout << "Wybierz opcję: ";
+    
+    char wybor = cin.get();
+    
+    switch(wybor) {
+        case '1': {
+            LocalGame gra;
+            gra.uruchom();
+            break;
+        }
+        case '2': {
+            // TODO: Później
+            // NetworkGame gra("localhost", 8080);
+            // gra.uruchom();
+            cout << "Wkrótce!" << endl;
+            break;
+        }
+        case '3':
+            cout << "Do zobaczenia!" << endl;
+            break;
+        default:
+            cout << "Nieprawidłowa opcja!" << endl;
     }
-    else{
-        T1.ZERUJ();
-        T2.ZERUJ();
-        srand(time(NULL));
-        T1.los4(T1.T);
-        T2.los4(T2.T);
-        for(int i=0; i<2; i++){
-            T1.los3(T1.T);
-            T2.los3(T2.T);
-        }
-        for(int i=0; i<3; i++){
-            T1.los2(T1.T);
-            T2.los2(T2.T);
-        }
-        for(int i=0; i<4; i++){
-            T1.los1(T1.T);
-            T2.los1(T2.T);
-        }
-    }
-
-        cout << "\033[2J\033[1;1H";
-        cin.ignore();
-        cout<< "Niech przygotuje sie gracz1"<<endl;
-        cin.get();
-
-        o='T';
-    do{
-        cout<<"Tura Gracza: ";
-        G1.Nazwa1();
-        cout<<endl<<"Plansza strzalow:"<<endl;
-        T1.piszT(T1.P);
-        cout<<endl<<"Plansza statkow:"<<endl;
-        T1.piszT(T1.T);
-        a=cin.get();
-        b=cin.get();
-        G1.Strzal(T2.T,T1.P,a,b);
-
-        cin.ignore();
-        cout<< "Niech przygotuje sie kolejny gracz"<<endl;
-        cin.get();
-        cout << "\033[2J\033[1;1H";
-
-        cout<<"Tura Gracza: ";
-        G1.Nazwa2();
-        cout<<endl<<"Plansza strzalow:"<<endl;
-        T2.piszT(T2.P);
-        cout<<endl<<"Plansza statkow:"<<endl;
-        T2.piszT(T2.T);
-        a=cin.get();
-        b=cin.get();
-        G1.Strzal(T1.T,T2.P,a,b);
-
-        a=T1.SprawdzT(T1.T);
-        b=T2.SprawdzT(T2.T);
-        if(a==1&b==2){
-            cout<<"Wygral "; G1.Nazwa1();
-            o='N';
-        }
-        else if(a==2&b==1){
-            cout<<"Wygral "; G1.Nazwa2();
-            o='N';
-        }
-
-        G1.zapiszT(T1.T,T2.T,T1.P,T2.P);
-        cout<<"+++Autosave+++"<<endl;
-
-        cin.ignore();
-        cout<< "Niech przygotuje sie kolejny gracz"<<endl;
-        cin.get();
-        cout << "\033[2J\033[1;1H";
-
-
-    }while(o=='T');
-return 0;
+    
+    return 0;
 }

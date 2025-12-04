@@ -23,16 +23,16 @@ class Plansza
 
     void ZERUJ();//zerujue plansze
 
-    void piszT(int T[maks][maks]);//wypisuje plansze
+    void piszT();//wypisuje plansze
 
-    void los4(int T[maks][maks]);
+    void los4();
 
-    void los3(int T[maks][maks]);
+    void los3();
 
-    void los2(int T[maks][maks]);
+    void los2();
 
-    void los1(int T[maks][maks]);
+    void los1();
 
-    int SprawdzT(int T[maks][maks]);
+    int SprawdzT();
 
 };

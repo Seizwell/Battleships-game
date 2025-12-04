@@ -2,23 +2,27 @@ CXX = g++
 CXXFLAGS = -std=c++14 -Wall -Wextra -Isrc/common
 BINDIR = bin
 COMMONDIR = src/common
+CLIENTDIR = src/client
 
 # Pliki współdzielone
 COMMON_SOURCES = $(COMMONDIR)/gra.cpp $(COMMONDIR)/plansza.cpp
 COMMON_HEADERS = $(COMMONDIR)/gra.h $(COMMONDIR)/plansza.h
+CLIENT_SOURCES = $(CLIENTDIR)/localgame.cpp
+CLIENT_HEADERS = $(CLIENTDIR)/localgame.h 
 
-all: $(BINDIR)/server.out $(BINDIR)/client.out
+
+all: $(BINDIR)/server $(BINDIR)/client
 
 # Serwer zależy od server.cpp i wszystkich plików z common
-$(BINDIR)/server.out: src/server/server.cpp $(COMMON_SOURCES) $(COMMON_HEADERS)
+$(BINDIR)/server: src/server/server.cpp $(COMMON_SOURCES) $(COMMON_HEADERS)
 	@mkdir -p $(BINDIR)
 	$(CXX) $(CXXFLAGS) src/server/server.cpp $(COMMON_SOURCES) -o $@
 	@echo "✓ Serwer skompilowany"
 
 # Klient zależy od client.cpp i wszystkich plików z common
-$(BINDIR)/client.out: src/client/client.cpp $(COMMON_SOURCES) $(COMMON_HEADERS)
+$(BINDIR)/client: src/client/client.cpp $(COMMON_SOURCES) $(COMMON_HEADERS) $(CLIENT_SOURCES) $(CLIENT_HEADERS)
 	@mkdir -p $(BINDIR)
-	$(CXX) $(CXXFLAGS) src/client/client.cpp $(COMMON_SOURCES) -o $@
+	$(CXX) $(CXXFLAGS) src/client/client.cpp $(COMMON_SOURCES) $(CLIENT_SOURCES) -o $@
 	@echo "✓ Klient skompilowany"
 
 clean:
@@ -26,10 +30,10 @@ clean:
 	@echo "✓ Wyczyszczono"
 
 # Pomocne cele
-run-server: $(BINDIR)/server.out
-	./$(BINDIR)/server.out
+run-server: $(BINDIR)/server
+	./$(BINDIR)/server
 
-run-client: $(BINDIR)/client.out
-	./$(BINDIR)/client.out
+run-client: $(BINDIR)/client
+	./$(BINDIR)/client
 
 .PHONY: all clean run-server run-client

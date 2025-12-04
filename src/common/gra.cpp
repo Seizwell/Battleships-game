@@ -46,7 +46,7 @@ void Gra::Strzal(int T[12][12], int P[12][12], int x, int y)
 void Gra::zapiszT(int T1[12][12], int T2[12][12],int P1[12][12], int P2[12][12])
 {
     ofstream plik;
-    plik.open("statki.txt");
+    plik.open("../bin/statki.txt");
     plik<<gracz1<<endl;
     plik<<gracz2<<endl;
     for(int i=0; i<12; i++){
@@ -76,7 +76,7 @@ void Gra::zapiszT(int T1[12][12], int T2[12][12],int P1[12][12], int P2[12][12])
 void Gra::wczytajT(int T1[12][12], int T2[12][12],int P1[12][12], int P2[12][12])
 {
     ifstream plik;
-    plik.open("statki.txt");
+    plik.open("../bin/statki.txt");
     if(plik.is_open()){
         plik>>gracz1;
         plik>>gracz2;

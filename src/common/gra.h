@@ -13,7 +13,6 @@ using namespace std;
 
 class Gra
 {
-
     string gracz1; //nazwa gracza 1
 
     string gracz2; //nazwa gracza 2
@@ -26,6 +25,7 @@ class Gra
     string Nazwa1();
 
     string Nazwa2();
+
 
     void Strzal(int T[12][12], int P[12][12],int x,int y);//strzał ręczny
 

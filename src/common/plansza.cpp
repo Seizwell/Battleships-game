@@ -22,7 +22,7 @@ void Plansza::ZERUJ()
 }
 
 
-void Plansza::piszT(int T[maks][maks])
+void Plansza::piszT()
 {
     for(int i=1; i<11; i++){
         for(int j=1; j<11; j++){
@@ -66,7 +66,7 @@ void Plansza::piszT(int T[maks][maks])
     cout<<"\n\n";
 }
 
-void Plansza::los4(int T[maks][maks]){
+void Plansza::los4(){
     int k=0+rand()%(1-0+1);
     int x=0;
     int y=0;
@@ -96,7 +96,7 @@ void Plansza::los4(int T[maks][maks]){
     }
 }
 
-void Plansza::los3(int T[maks][maks]){
+void Plansza::los3(){
     int k=0+rand()%(1-0+1);
     int a;
     if(k==0){
@@ -155,7 +155,7 @@ void Plansza::los3(int T[maks][maks]){
     }
 }
 
-void Plansza::los2(int T[maks][maks]){
+void Plansza::los2(){
     int k=0+rand()%(1-0+1);
     int a;
     if(k==0){
@@ -214,7 +214,7 @@ void Plansza::los2(int T[maks][maks]){
     }
 }
 
-void Plansza::los1(int T[maks][maks]){
+void Plansza::los1(){
     int k=0+rand()%(1-0+1);
     int a;
     if(k==0){
@@ -273,7 +273,7 @@ void Plansza::los1(int T[maks][maks]){
     }
 }
 
-int Plansza::SprawdzT(int T[maks][maks]){
+int Plansza::SprawdzT(){
     for(int x=0; x<maks; x++){
         for(int y=0; y<maks; y++){
             if(T[x][y]==1||T[x][y]==2||T[x][y]==3||T[x][y]==4){
