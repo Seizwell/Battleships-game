@@ -11,8 +11,6 @@
 #include <term.h>
 #include <time.h>
 
-#include "../common/gra.h"
-#include "../common/plansza.h"
 #include "localgame.h"
 
 void LocalGame::inicjalizujNowaGre()
@@ -28,42 +26,85 @@ void LocalGame::inicjalizujNowaGre()
     for(int i = 0; i < 2; i++) planszaGracza2.los3();
     for(int i = 0; i < 3; i++) planszaGracza2.los2();
     for(int i = 0; i < 4; i++) planszaGracza2.los1();
-}
 
-void LocalGame::wczytajGre()
-{
-    gra.wczytajT(planszaGracza1.T,planszaGracza2.T,planszaGracza1.P,planszaGracza2.P);
-}
+    string nazwa1, nazwa2;
+    cout << "Podaj nazwę Gracza 1: ";
+    cin >> nazwa1;
+    gra.set_nazwag1(nazwa1);
 
-void LocalGame::zapiszGre()
-{
-    gra.zapiszT(planszaGracza1.T,planszaGracza2.T,planszaGracza1.P,planszaGracza2.P);
-}
-
-bool LocalGame::wykonajTureGracza(int numerGracza)
-{
-    return false;
+    cout << "Podaj nazwę Gracza 2: ";
+    cin >> nazwa2;
+    gra.set_nazwag2(nazwa2);
+    
 }
 
 bool LocalGame::sprawdzKoniec()
 {
+    if(planszaGracza1.SprawdzT())
+    {
+        cout<<"Gracz "<< gra.get_nazwag1()<<" nie ma statkow"<<"\n";
+        cout<<"Gracz "<< gra.get_nazwag2()<<" WYGRAL"<<"\n";
+        return true;
+    }
+    if(planszaGracza2.SprawdzT())
+    {
+        cout<<"Gracz "<< gra.get_nazwag1()<<" nie ma statkow"<<"\n";
+        cout<<"Gracz "<< gra.get_nazwag2()<<" WYGRAL"<<"\n";
+        return true;
+    }
     return false;
 }
 
 void LocalGame::uruchom()
 {
-    cout << "Chcesz kontynuowac poprzednia gre czy zaczac nowa? Wpisz P dla poprzedniej lub N dla nowej: ";
-    char wybor = toupper(cin.get());
-    cout << "\n";
-    
-    if(wybor == 'P') {
-        wczytajGre();
+    cout << "Chcesz kontynuowac poprzednia gre czy zaczac nowa? Wpisz P dla poprzedniej lub N dla nowej: "<<"\n";
+    char wybor;
+    cin >> wybor;
+
+    if(toupper(wybor) == 'P') {
+        gra.wczytajT(planszaGracza1.T,planszaGracza2.T,planszaGracza1.P,planszaGracza2.P);
+
     } else {
         inicjalizujNowaGre();
     }
-    cout << "Podaj nazwę Gracza " << gracz1 << ": ";
-    cin.get();
-
-    cout << "Podaj nazwę Gracza " << gracz2 << ": ";
-    cin.get();
+    system("clear");
+    char c;
+    do
+    {
+        int x1,y1,x2,y2;
+        cout<<"Tura Gracza "<<gra.get_nazwag1()<<"Wciśnij przycisk gdy będziesz gotowy"<<"\n";
+        cin.get();
+        planszaGracza1.piszP();
+        planszaGracza1.piszT();
+        cout<<"Podaj X strzalu: "<<"\n";
+        cin >> x1;
+        cout<<"Podaj Y strzalu: "<<"\n";
+        cin >> y1;
+        gra.Strzal(planszaGracza2.T,planszaGracza1.P,x1,y1);
+        system("clear");
+        if(sprawdzKoniec())
+        {
+            break;
+        }
+        cout<<"Tura Gracza "<<gra.get_nazwag2()<<"Wciśnij przycisk gdy będziesz gotowy"<<"\n";
+        cin.get();
+        planszaGracza2.piszP();
+        planszaGracza2.piszT();
+        cout<<"Podaj X strzalu: "<<"\n";
+        cin >> x2;
+        cout<<"Podaj Y strzalu: "<<"\n";
+        cin >> y2;
+        gra.Strzal(planszaGracza1.T,planszaGracza2.P,x2,y2);
+        system("clear");
+        if(sprawdzKoniec())
+        {
+            break;
+        }
+        gra.zapiszT(planszaGracza1.T,planszaGracza2.T,planszaGracza1.P,planszaGracza2.P);
+        cout<<"--- AUTOSAVE ---"<<"\n";
+        cout<<"Czy chcesz kontynuować rozgrywkę T/N"<<"\n";
+        cin >> c;
+    } while (toupper(c) =='T');
+    
+ 
 }

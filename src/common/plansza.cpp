@@ -29,11 +29,11 @@ void Plansza::piszT()
             switch(T[i][j]){
                 case 0:
                     cout.width(2);
-                    cout<<".";
+                    cout<<".";//nic
                     break;
                 case 1:
                     cout.width(2);
-                    cout<<"x";
+                    cout<<"x";//statek
                     break;
                 case 2:
                     cout.width(2);
@@ -53,11 +53,11 @@ void Plansza::piszT()
                     break;
                 case 7:
                     cout.width(2);
-                    cout<<"~";
+                    cout<<"~";//pudlo
                     break;
                 case 8:
                     cout.width(2);
-                    cout<<"o";
+                    cout<<"o";//trafiony
                     break;
             }
         }
@@ -66,7 +66,52 @@ void Plansza::piszT()
     cout<<"\n\n";
 }
 
-void Plansza::los4(){
+void Plansza::piszP()
+{
+    for(int i=1; i<11; i++){
+        for(int j=1; j<11; j++){
+            switch(P[i][j]){
+                case 0:
+                    cout.width(2);
+                    cout<<".";//nic
+                    break;
+                case 1:
+                    cout.width(2);
+                    cout<<"x";//statek
+                    break;
+                case 2:
+                    cout.width(2);
+                    cout<<"x";
+                    break;
+                case 3:
+                    cout.width(2);
+                    cout<<"x";
+                    break;
+                case 4:
+                    cout.width(2);
+                    cout<<"x";
+                    break;
+                case 5:
+                    cout.width(2);
+                    cout<<".";
+                    break;
+                case 7:
+                    cout.width(2);
+                    cout<<"~";//pudlo
+                    break;
+                case 8:
+                    cout.width(2);
+                    cout<<"o";//trafiony
+                    break;
+            }
+        }
+        cout<<"\n";
+    }
+    cout<<"\n\n";
+}
+
+void Plansza::los4()
+{
     int k=0+rand()%(1-0+1);
     int x=0;
     int y=0;
@@ -96,7 +141,8 @@ void Plansza::los4(){
     }
 }
 
-void Plansza::los3(){
+void Plansza::los3()
+{
     int k=0+rand()%(1-0+1);
     int a;
     if(k==0){
@@ -155,7 +201,8 @@ void Plansza::los3(){
     }
 }
 
-void Plansza::los2(){
+void Plansza::los2()
+{
     int k=0+rand()%(1-0+1);
     int a;
     if(k==0){
@@ -214,7 +261,8 @@ void Plansza::los2(){
     }
 }
 
-void Plansza::los1(){
+void Plansza::los1()
+{
     int k=0+rand()%(1-0+1);
     int a;
     if(k==0){
@@ -273,13 +321,14 @@ void Plansza::los1(){
     }
 }
 
-int Plansza::SprawdzT(){
+bool Plansza::SprawdzT()
+{
     for(int x=0; x<maks; x++){
         for(int y=0; y<maks; y++){
             if(T[x][y]==1||T[x][y]==2||T[x][y]==3||T[x][y]==4){
-                return 2;
+                return false;
             }
         }
     }
-    return 1;
+    return true;
 }

@@ -1,3 +1,6 @@
+#ifndef PLANSZA_H
+#define PLANSZA_H
+
 #include <iostream>
 #include <iomanip>
 #include <cstdlib>
@@ -10,7 +13,7 @@
 
 using namespace std;
 
-int const maks = 12;
+constexpr int maks = 12;
 
 class Plansza
 {
@@ -23,7 +26,9 @@ class Plansza
 
     void ZERUJ();//zerujue plansze
 
-    void piszT();//wypisuje plansze
+    void piszT();//wypisuje plansze statkow
+
+    void piszP();//wypisuje plansze strzalow
 
     void los4();
 
@@ -33,6 +38,7 @@ class Plansza
 
     void los1();
 
-    int SprawdzT();
+    bool SprawdzT();//sprawdza czy plansza nie ma statkow
 
 };
+#endif
