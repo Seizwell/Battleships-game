@@ -1,5 +1,7 @@
 CXX = g++
 CXXFLAGS = -std=c++14 -Wall -Wextra -Isrc/common
+LDFLAGS = -lsfml-graphics -lsfml-window -lsfml-system -lsfml-network -lpthread
+
 BINDIR = bin
 COMMONDIR = src/common
 CLIENTDIR = src/client
@@ -7,8 +9,8 @@ CLIENTDIR = src/client
 # Pliki współdzielone
 COMMON_SOURCES = $(COMMONDIR)/gra.cpp $(COMMONDIR)/plansza.cpp
 COMMON_HEADERS = $(COMMONDIR)/gra.h $(COMMONDIR)/plansza.h
-CLIENT_SOURCES = $(CLIENTDIR)/localgame.cpp $(CLIENTDIR)/onlinegame.cpp
-CLIENT_HEADERS = $(CLIENTDIR)/localgame.h $(CLIENTDIR)/onlinegame.h
+CLIENT_SOURCES = $(CLIENTDIR)/localgame.cpp $(CLIENTDIR)/onlinegame.cpp $(CLIENTDIR)/guigame.cpp
+CLIENT_HEADERS = $(CLIENTDIR)/localgame.h $(CLIENTDIR)/onlinegame.h $(CLIENTDIR)/guigame.h
 
 
 all: $(BINDIR)/server $(BINDIR)/client
