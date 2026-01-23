@@ -7,8 +7,8 @@ CLIENTDIR = src/client
 # Pliki współdzielone
 COMMON_SOURCES = $(COMMONDIR)/gra.cpp $(COMMONDIR)/plansza.cpp
 COMMON_HEADERS = $(COMMONDIR)/gra.h $(COMMONDIR)/plansza.h
-CLIENT_SOURCES = $(CLIENTDIR)/localgame.cpp
-CLIENT_HEADERS = $(CLIENTDIR)/localgame.h 
+CLIENT_SOURCES = $(CLIENTDIR)/localgame.cpp $(CLIENTDIR)/onlinegame.cpp
+CLIENT_HEADERS = $(CLIENTDIR)/localgame.h $(CLIENTDIR)/onlinegame.h
 
 
 all: $(BINDIR)/server $(BINDIR)/client

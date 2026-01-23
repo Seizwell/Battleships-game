@@ -3,6 +3,7 @@
 #include <cstdlib>
 
 #include "localgame.h"
+#include "onlinegame.h"
 
 using namespace std;
 
@@ -25,10 +26,19 @@ int main(){
             break;
         }
         case '2': {
-            // TODO: Później
-            // NetworkGame gra("localhost", 8080);
-            // gra.uruchom();
-            cout << "Wkrótce!" << endl;
+            string nazwa;
+            cout << "Podaj swoją nazwę gracza: ";
+            // Używamy getline, żeby nazwa mogła mieć spacje (opcjonalnie)
+            // Ale cin >> nazwa jest bezpieczniejsze na start, zostańmy przy tym:
+            cin >> nazwa;
+
+            string ip;
+            cout << "Podaj IP serwera (np. 127.0.0.1): ";
+            cin >> ip;
+            
+            OnlineGame gra;
+            // Przekazujemy nazwę do funkcji
+            gra.uruchom(ip, 8080, nazwa);
             break;
         }
         case '3':
