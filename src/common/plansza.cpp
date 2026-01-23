@@ -24,90 +24,53 @@ void Plansza::ZERUJ()
 
 void Plansza::piszT()
 {
+    cout << "   "; // Wcięcie dla nagłówka
+    for(int j=1; j<11; j++) cout << setw(2) << j << " "; // Numery kolumn
+    cout << "\n";
+
     for(int i=1; i<11; i++){
+        cout << setw(2) << i << " "; // Numer wiersza
         for(int j=1; j<11; j++){
+            cout << setw(2); // Stała szerokość
             switch(T[i][j]){
-                case 0:
-                    cout.width(2);
-                    cout<<".";//nic
-                    break;
-                case 1:
-                    cout.width(2);
-                    cout<<"x";//statek
-                    break;
-                case 2:
-                    cout.width(2);
-                    cout<<"x";
-                    break;
-                case 3:
-                    cout.width(2);
-                    cout<<"x";
-                    break;
-                case 4:
-                    cout.width(2);
-                    cout<<"x";
-                    break;
-                case 5:
-                    cout.width(2);
-                    cout<<".";
-                    break;
-                case 7:
-                    cout.width(2);
-                    cout<<"~";//pudlo
-                    break;
-                case 8:
-                    cout.width(2);
-                    cout<<"o";//trafiony
-                    break;
+                case 0: cout<<"."; break; // woda
+                case 1: 
+                case 2: 
+                case 3: 
+                case 4: cout<<"#"; break; // statek (zmieniłem na # dla lepszej widoczności)
+                case 5: cout<<"."; break; // bufor wokół statku (niewidoczny dla gracza jako statek)
+                case 7: cout<<"~"; break; // pudło
+                case 8: cout<<"X"; break; // trafiony
+                default: cout << "?";
             }
+            cout << " "; // Odstęp między polami
         }
         cout<<"\n";
     }
-    cout<<"\n\n";
+    cout<<"\n";
 }
 
 void Plansza::piszP()
 {
+    cout << "   ";
+    for(int j=1; j<11; j++) cout << setw(2) << j << " ";
+    cout << "\n";
+
     for(int i=1; i<11; i++){
+        cout << setw(2) << i << " ";
         for(int j=1; j<11; j++){
+            cout << setw(2);
             switch(P[i][j]){
-                case 0:
-                    cout.width(2);
-                    cout<<".";//nic
-                    break;
-                case 1:
-                    cout.width(2);
-                    cout<<"x";//statek
-                    break;
-                case 2:
-                    cout.width(2);
-                    cout<<"x";
-                    break;
-                case 3:
-                    cout.width(2);
-                    cout<<"x";
-                    break;
-                case 4:
-                    cout.width(2);
-                    cout<<"x";
-                    break;
-                case 5:
-                    cout.width(2);
-                    cout<<".";
-                    break;
-                case 7:
-                    cout.width(2);
-                    cout<<"~";//pudlo
-                    break;
-                case 8:
-                    cout.width(2);
-                    cout<<"o";//trafiony
-                    break;
+                case 0: cout<<"."; break;
+                case 7: cout<<"~"; break; // pudło
+                case 8: cout<<"X"; break; // trafiony
+                default: cout<<"."; break; // statki wroga są ukryte (domyślnie kropka)
             }
+            cout << " ";
         }
         cout<<"\n";
     }
-    cout<<"\n\n";
+    cout<<"\n";
 }
 
 void Plansza::los4()

@@ -1,9 +1,14 @@
 #include <iostream>
+#include <ctime>  
+#include <cstdlib>
 
 #include "localgame.h"
 
+using namespace std;
 
 int main(){
+    srand(time(NULL));
+
     cout << "=== STATKI ===" << endl;
     cout << "1. Gra lokalna (2 graczy na zmianę)" << endl;
     cout << "2. Gra przez sieć (multiplayer)" << endl;
@@ -11,6 +16,7 @@ int main(){
     cout << "Wybierz opcję: ";
     
     char wybor = cin.get();
+    if(wybor != '\n') cin.ignore(1000, '\n');
     
     switch(wybor) {
         case '1': {

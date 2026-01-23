@@ -57,54 +57,91 @@ bool LocalGame::sprawdzKoniec()
 
 void LocalGame::uruchom()
 {
-    cout << "Chcesz kontynuowac poprzednia gre czy zaczac nowa? Wpisz P dla poprzedniej lub N dla nowej: "<<"\n";
+    cout << "Chcesz kontynuowac poprzednia gre czy zaczac nowa? (P - poprzednia, N - nowa): ";
     char wybor;
     cin >> wybor;
+    cin.ignore(1000, '\n');
 
     if(toupper(wybor) == 'P') {
         gra.wczytajT(planszaGracza1.T,planszaGracza2.T,planszaGracza1.P,planszaGracza2.P);
-
     } else {
         inicjalizujNowaGre();
     }
-    system("clear");
-    char c;
+
+    char c = 'T'; // Inicjalizacja, żeby wejść do pętli
     do
     {
-        int x1,y1,x2,y2;
-        cout<<"Tura Gracza "<<gra.get_nazwag1()<<"Wciśnij przycisk gdy będziesz gotowy"<<"\n";
-        cin.get();
+        // === TURA GRACZA 1 ===
+        system("clear"); 
+        cout << "Tura Gracza: " << gra.get_nazwag1() << "\n";
+        cout << "Przekaż komputer Graczowi " << gra.get_nazwag1() << " i wciśnij ENTER...";
+        cin.get(); // Czeka na enter
+
+        system("clear");
+        cout << "--- PLANSZA STRZALOW GRACZA " << gra.get_nazwag1() << " ---\n";
         planszaGracza1.piszP();
+        cout << "--- TWOJE STATKI ---\n";
         planszaGracza1.piszT();
-        cout<<"Podaj X strzalu: "<<"\n";
-        cin >> x1;
-        cout<<"Podaj Y strzalu: "<<"\n";
-        cin >> y1;
-        gra.Strzal(planszaGracza2.T,planszaGracza1.P,x1,y1);
+        
+        int x1, y1;
+        do {
+            cout << "Podaj Wiersz strzalu (1-10): ";
+            cin >> x1;
+            cout << "Podaj Kolumne strzalu (1-10): ";
+            cin >> y1;
+            
+            if(cin.fail() || x1 < 1 || x1 > 10 || y1 < 1 || y1 > 10) {
+                cout << "Błąd! Współrzędne muszą być liczbami od 1 do 10.\n";
+                cin.clear(); // Czyści flagę błędu
+                cin.ignore(1000, '\n'); // Usuwa błędne dane z bufora
+            } else {
+                break; // Dane poprawne
+            }
+        } while(true);
+
+        gra.Strzal(planszaGracza2.T, planszaGracza1.P, x1, y1);
+        cin.ignore(1000, '\n'); // Czyścimy bufor po cin >> int
+
+        if(sprawdzKoniec()) break;
+
+        // === TURA GRACZA 2 ===
         system("clear");
-        if(sprawdzKoniec())
-        {
-            break;
-        }
-        cout<<"Tura Gracza "<<gra.get_nazwag2()<<"Wciśnij przycisk gdy będziesz gotowy"<<"\n";
+        cout << "Tura Gracza: " << gra.get_nazwag2() << "\n";
+        cout << "Przekaż komputer Graczowi " << gra.get_nazwag2() << " i wciśnij ENTER...";
         cin.get();
-        planszaGracza2.piszP();
-        planszaGracza2.piszT();
-        cout<<"Podaj X strzalu: "<<"\n";
-        cin >> x2;
-        cout<<"Podaj Y strzalu: "<<"\n";
-        cin >> y2;
-        gra.Strzal(planszaGracza1.T,planszaGracza2.P,x2,y2);
+
         system("clear");
-        if(sprawdzKoniec())
-        {
-            break;
-        }
-        gra.zapiszT(planszaGracza1.T,planszaGracza2.T,planszaGracza1.P,planszaGracza2.P);
-        cout<<"--- AUTOSAVE ---"<<"\n";
-        cout<<"Czy chcesz kontynuować rozgrywkę T/N"<<"\n";
+        cout << "--- PLANSZA STRZALOW GRACZA " << gra.get_nazwag2() << " ---\n";
+        planszaGracza2.piszP();
+        cout << "--- TWOJE STATKI ---\n";
+        planszaGracza2.piszT();
+        
+        int x2, y2;
+        do {
+            cout << "Podaj Wiersz strzalu (1-10): ";
+            cin >> x2;
+            cout << "Podaj Kolumne strzalu (1-10): ";
+            cin >> y2;
+             if(cin.fail() || x2 < 1 || x2 > 10 || y2 < 1 || y2 > 10) {
+                cout << "Błąd! Współrzędne muszą być liczbami od 1 do 10.\n";
+                cin.clear();
+                cin.ignore(1000, '\n');
+            } else {
+                break;
+            }
+        } while(true);
+
+        gra.Strzal(planszaGracza1.T, planszaGracza2.P, x2, y2);
+        cin.ignore(1000, '\n');
+
+        if(sprawdzKoniec()) break;
+
+        // === AUTOSAVE I PYTANIE ===
+        gra.zapiszT(planszaGracza1.T, planszaGracza2.T, planszaGracza1.P, planszaGracza2.P);
+        
+        cout << "\nGra zapisana.\nCzy chcesz grać dalej? (T/N): ";
         cin >> c;
-    } while (toupper(c) =='T');
-    
- 
+        cin.ignore(1000, '\n'); // Znowu czyszczenie po wczytaniu chara
+
+    } while (toupper(c) == 'T');
 }
