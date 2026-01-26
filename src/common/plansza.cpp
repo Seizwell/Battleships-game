@@ -37,8 +37,8 @@ void Plansza::piszT()
                 case 1: 
                 case 2: 
                 case 3: 
-                case 4: cout<<"#"; break; // statek (zmieniłem na # dla lepszej widoczności)
-                case 5: cout<<"."; break; // bufor wokół statku (niewidoczny dla gracza jako statek)
+                case 4: cout<<"#"; break; // statek 
+                case 5: cout<<"."; break; // bufor wokół statku
                 case 7: cout<<"~"; break; // pudło
                 case 8: cout<<"X"; break; // trafiony
                 default: cout << "?";

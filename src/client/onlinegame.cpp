@@ -70,7 +70,6 @@ bool OnlineGame::polacz(string ip, int port) {
 }
 
 void OnlineGame::wyslijWiadomosc(string msg) {
-    // Dodajemy znak nowej linii jako separator
     msg += "\n";
     send(sock, msg.c_str(), msg.length(), 0);
 }
@@ -93,15 +92,9 @@ string rawRead(int sock) {
             return ""; 
         }
         else { 
-            // Błąd (valread == -1)
-            // Sprawdzamy, czy to tylko timeout, czy prawdziwy błąd
             if (errno == EAGAIN || errno == EWOULDBLOCK) {
-                // To tylko timeout (minęło 5s ciszy).
-                // Ignorujemy to i wracamy do czytania (continue).
-                // Dzięki temu wątek "wisi" na pętli, ale nie zamyka gry.
                 continue; 
             }
-            // Inny błąd (np. zerwany kabel)
             return ""; 
         }
     }
@@ -116,24 +109,15 @@ void OnlineGame::watekNasluchiwania() {
         string msg = rawRead(sock);
         
         if (msg == "") {
-            // Rozłączenie
             connected = false;
-            // Powiadom oczekujący główny wątek, żeby się odblokował i zakończył
             queueCV.notify_all(); 
             break;
         }
 
-        // SPRAWDZAMY CO PRZYSZŁO
         if (msg.rfind("CHAT", 0) == 0) {
-            // To jest wiadomość czatu! Wypisz od razu.
-            // \r kasuje obecną linię (np. "Podaj X:"), wypisuje czat, a potem trzeba by odświeżyć prompt
             cout << "\n\033[1;33m[CHAT PRZECIWNIK]: " << msg.substr(5) << "\033[0m\n"; 
-            // Ponieważ cout jest asynchroniczny, może trochę popsuć interfejs, 
-            // ale to najprostsza metoda w konsoli.
         } 
         else {
-            // To jest komenda gry (TURN, SHOT, WIN, HIT...)
-            // Wrzucamy do kolejki dla głównego wątku
             {
                 lock_guard<mutex> lock(queueMutex);
                 gameMsgQueue.push(msg);
@@ -143,10 +127,8 @@ void OnlineGame::watekNasluchiwania() {
     }
 }
 
-// Główny wątek używa tego zamiast read()
 string OnlineGame::pobierzKomendeGry() {
     unique_lock<mutex> lock(queueMutex);
-    // Czekaj aż kolejka nie będzie pusta LUB rozłączono
     queueCV.wait(lock, [this]{ return !gameMsgQueue.empty() || !connected; });
 
     if (!connected) return "";
@@ -155,10 +137,6 @@ string OnlineGame::pobierzKomendeGry() {
     gameMsgQueue.pop();
     return msg;
 }
-
-// Metody polacz, wyslijWiadomosc, inicjalizujStatki - BEZ ZMIAN (skopiuj ze starego pliku)
-// Pamiętaj tylko, aby wyslijWiadomosc używała mutexa jeśli chcesz być super bezpieczny, 
-// ale przy TCP send() jest zazwyczaj thread-safe.
 
 void OnlineGame::uruchom(string ip, int port, string nazwaGracza) {
     if (!polacz(ip, port)) return;
@@ -187,13 +165,12 @@ void OnlineGame::uruchom(string ip, int port, string nazwaGracza) {
         else if (cmd == "TURN") {
             obslugaTury();
         } 
-        // ... reszta logiki SHOT/WIN/LOSE bez zmian, tylko używa cmd ...
         else if (cmd.rfind("SHOT", 0) == 0) { 
              int x, y;
              sscanf(cmd.c_str(), "SHOT %d %d", &x, &y);
              cout << "Przeciwnik strzela w pole " << x << " " << y << "!\n";
              
-             // Logika trafienia (taka sama jak była)
+             // Logika trafienia
              int dummyP[12][12];
              gra.Strzal(mojaPlansza.T, dummyP, x, y);
              int wynik = mojaPlansza.T[x][y];

@@ -12,7 +12,7 @@
 
 class OnlineGame {
 private:
-    Plansza mojaPlansza; // Tutaj trzymamy nasze statki (T) i nasze strzały (P)
+    Plansza mojaPlansza;
     Gra gra;
     
     int sock; // Deskryptor gniazda
