@@ -251,3 +251,23 @@ void OnlineGame::obslugaTury() {
         mojaPlansza.P[x][y] = 7;
     }
 }
+
+string serializeBoard(int T[12][12]) {
+    string s = "";
+    for (int i = 1; i <= 10; i++) {
+        for (int j = 1; j <= 10; j++) {
+            s += to_string(T[i][j]);
+        }
+    }
+    return s;
+}
+
+string boardToString(int T[12][12]) {
+    string s = "";
+    for (int i = 1; i <= 10; i++) {
+        for (int j = 1; j <= 10; j++) {
+            s += to_string(T[i][j]);
+        }
+    }
+    return s;
+}

@@ -11,7 +11,29 @@ using namespace std;
 
 #define SFML_3_0 (SFML_VERSION_MAJOR >= 3)
 
-GuiGame::GuiGame() : state(MENU), isPlayer1Turn(true), waitingForSwitch(false), sock(-1), connected(false), myTurnOnline(false), lastShotX(0), lastShotY(0) {
+static string boardToString(int T[12][12]) {
+    string s = "";
+    for (int i = 1; i <= 10; i++) {
+        for (int j = 1; j <= 10; j++) {
+            s += to_string(T[i][j]);
+        }
+    }
+    return s;
+}
+
+GuiGame::GuiGame() : 
+    state(MENU), 
+    cellSize(35), 
+    gridOffsetX(50), 
+    gridOffsetY(180),
+    isPlayer1Turn(true), 
+    waitingForSwitch(false), 
+    sock(-1), 
+    connected(false), 
+    lastShotX(0), 
+    lastShotY(0),
+    myTurnOnline(false) 
+{
     unsigned int style = sf::Style::Titlebar | sf::Style::Close;
 #if SFML_3_0
     window.create(sf::VideoMode({900, 800}), "BATTLESHIPS", style);
@@ -80,13 +102,11 @@ void GuiGame::run() {
              sf::Text res(gameOverMsg, font, 60); res.setPosition(150, 300);
              sf::Text hint("Wcisnij ESC aby wrocic do menu", font, 30); hint.setPosition(220, 400);
 #endif
-             // Koloruj wynik
              if (gameOverMsg.find("WYGRA") != string::npos) res.setFillColor(sf::Color::Green);
              else if (gameOverMsg.find("PRZEGRA") != string::npos) res.setFillColor(sf::Color::Red);
-             else res.setFillColor(sf::Color::Yellow); // Remis/Inne
+             else res.setFillColor(sf::Color::Yellow);
 
              hint.setFillColor(sf::Color::White);
-             
              window.draw(res);
              window.draw(hint);
         }
@@ -148,6 +168,7 @@ void GuiGame::drawGame() {
             sf::RectangleShape cover(sf::Vector2f((float)window.getSize().x, (float)window.getSize().y));
             cover.setFillColor(sf::Color::Black);
             window.draw(cover);
+            
             mainStatus.setString("ZMIANA GRACZA");
 #if SFML_3_0
             mainStatus.setPosition({300.f, 300.f});
@@ -156,6 +177,7 @@ void GuiGame::drawGame() {
 #endif
             mainStatus.setFillColor(sf::Color::Red);
             window.draw(mainStatus);
+            
             actionStatus.setString("Wcisnij SPACJE...");
 #if SFML_3_0
             actionStatus.setPosition({280.f, 350.f});
@@ -300,7 +322,6 @@ void GuiGame::drawGrid(int startX, int startY, int T[12][12], int P[12][12], boo
 void GuiGame::drawChat() {
     float chatY = 550.f;
     float chatH = 200.f;
-    
     sf::RectangleShape chatBg(sf::Vector2f(800.f, chatH));
 #if SFML_3_0
     chatBg.setPosition({50.f, chatY});
@@ -355,12 +376,10 @@ void GuiGame::handleInput(const sf::Event& event) {
             }
             if (keyEvent->code == sf::Keyboard::Key::Num2) {
                 state = INPUT_IP;
-                // ZMIANA: Usuń resztę zdarzeń (np. wpisanie "2")
                 while(const auto e = window.pollEvent()){}
             }
         }
     }
-    // OBSŁUGA WPISYWANIA IP/PORTU (SFML 3.0)
     else if (state == INPUT_IP || state == INPUT_PORT) {
         if (const auto* textEvent = event.getIf<sf::Event::TextEntered>()) {
             string* target = (state == INPUT_IP) ? &inputIP : &inputPort;
@@ -373,11 +392,9 @@ void GuiGame::handleInput(const sf::Event& event) {
                 else {
                     int port = 8080;
                     try { port = stoi(inputPort); } catch(...) {}
-                    
                     if(connectToServer(inputIP, port, "GuiPlayer")) {
                         state = PLAY_ONLINE;
                         setupShipsRandomly(planszaG1); gra.set_nazwag1("JA");
-                        // Wyczyść kolejkę po połączeniu
                         while(const auto e = window.pollEvent()){}
                     } else {
                         state = MENU;
@@ -462,11 +479,10 @@ void GuiGame::handleInput(const sf::Event& event) {
             }
             if (event.key.code == sf::Keyboard::Num2) {
                 state = INPUT_IP;
-                sf::Event e; while(window.pollEvent(e)){} // Czyszczenie
+                sf::Event e; while(window.pollEvent(e)){}
             }
         }
     }
-    // OBSŁUGA WPISYWANIA IP/PORTU (SFML 2.x)
     else if (state == INPUT_IP || state == INPUT_PORT) {
         if (event.type == sf::Event::TextEntered) {
             string* target = (state == INPUT_IP) ? &inputIP : &inputPort;
@@ -479,7 +495,6 @@ void GuiGame::handleInput(const sf::Event& event) {
                 else {
                     int port = 8080;
                     try { port = stoi(inputPort); } catch(...) {}
-                    
                     if(connectToServer(inputIP, port, "GuiPlayer")) {
                         state = PLAY_ONLINE;
                         setupShipsRandomly(planszaG1); gra.set_nazwag1("JA");
@@ -560,7 +575,6 @@ void GuiGame::handleLocalClick(int r, int c) {
     if (isPlayer1Turn) {
         if (planszaG1.P[r][c] != 0) return; 
         gra.Strzal(planszaG2.T, planszaG1.P, r, c);
-        //Sprawdzamy wygraną i ustawiamy komunikat
         if (planszaG2.SprawdzT()) {
             state = GAME_OVER;
             gameOverMsg = "GRACZ 1 WYGRAL!";
@@ -568,7 +582,6 @@ void GuiGame::handleLocalClick(int r, int c) {
     } else {
         if (planszaG2.P[r][c] != 0) return;
         gra.Strzal(planszaG1.T, planszaG2.P, r, c);
-        //Sprawdzamy wygraną
         if (planszaG1.SprawdzT()) {
             state = GAME_OVER;
             gameOverMsg = "GRACZ 2 WYGRAL!";
@@ -621,7 +634,17 @@ void GuiGame::processNetworkMessages() {
         msgQueue.pop();
         while (!cmd.empty() && isspace(cmd.back())) cmd.pop_back();
 
-        if (cmd.rfind("CHAT", 0) == 0) chatLog.push_back(cmd.substr(5));
+        if (cmd == "SEND_BOARD") {
+            string flatBoard = boardToString(planszaG1.T);
+            sendMsg(flatBoard);
+            setStatus("Wysyłanie planszy...");
+        }
+        else if (cmd.rfind("START", 0) == 0) {
+            setStatus("Gra z: " + cmd.substr(6));
+        }
+        else if (cmd.rfind("CHAT", 0) == 0) {
+            chatLog.push_back(cmd.substr(5));
+        }
         else if (cmd == "TURN") {
             myTurnOnline = true;
             setStatus("TWOJA TURA");
@@ -630,23 +653,30 @@ void GuiGame::processNetworkMessages() {
             myTurnOnline = false;
             setStatus("Ruch przeciwnika...");
         }
-        else if (cmd.rfind("SHOT", 0) == 0) {
-            int x, y; sscanf(cmd.c_str(), "SHOT %d %d", &x, &y);
-            int dummy[12][12]; gra.Strzal(planszaG1.T, dummy, x, y); 
-            if (planszaG1.T[x][y] == 8) { sendMsg("HIT"); setStatus("ZOSTALES TRAFIONY!"); }
-            else { sendMsg("MISS"); setStatus("Przeciwnik spudlowal"); }
+        else if (cmd.rfind("RESULT", 0) == 0) {
+            char type[10];
+            int x, y;
+            sscanf(cmd.c_str(), "RESULT %s %d %d", type, &x, &y);
+            
+            string res(type);
+            if (res == "HIT") {
+                chatLog.push_back(">> Trafiles w (" + to_string(x) + "," + to_string(y) + ")");
+                setStatus("TRAFIENIE!");
+                planszaG1.P[x][y] = 8;
+            } else {
+                chatLog.push_back(">> Pudlo w (" + to_string(x) + "," + to_string(y) + ")");
+                setStatus("PUDLO");
+                planszaG1.P[x][y] = 7; 
+            }
         }
-        else if (cmd == "HIT") {
-            chatLog.push_back(">> System: Trafienie!");
-            setStatus("TRAFIENIE!");
-            planszaG1.P[lastShotX][lastShotY] = 8;
+        else if (cmd.rfind("OPPONENT_SHOT", 0) == 0) {
+            int x, y;
+            sscanf(cmd.c_str(), "OPPONENT_SHOT %d %d", &x, &y);
+            if (planszaG1.T[x][y] >= 1 && planszaG1.T[x][y] <= 4) {
+                planszaG1.T[x][y] = 8; 
+                setStatus("ZOSTALES TRAFIONY!");
+            }
         }
-        else if (cmd == "MISS") {
-            chatLog.push_back(">> System: Pudlo.");
-            setStatus("PUDLO");
-            planszaG1.P[lastShotX][lastShotY] = 7;
-        }
-        //Ustawienie komunikatu dla Online
         else if (cmd == "WIN") { state = GAME_OVER; gameOverMsg = "WYGRALES!"; }
         else if (cmd == "LOSE") { state = GAME_OVER; gameOverMsg = "PRZEGRALES..."; }
     }
@@ -656,8 +686,9 @@ void GuiGame::handleOnlineClick(int r, int c) {
     if (planszaG1.P[r][c] != 0) return;
     lastShotX = r;
     lastShotY = c;
-    sendMsg(to_string(r) + " " + to_string(c));
-    planszaG1.P[r][c] = 7; 
-    myTurnOnline = false;
+    
+    sendMsg("SHOT " + to_string(r) + " " + to_string(c));
+    planszaG1.P[r][c] = 7;
+    myTurnOnline = false; 
     setStatus("Wysylanie strzalu...");
 }
