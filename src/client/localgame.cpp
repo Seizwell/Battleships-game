@@ -8,7 +8,7 @@
 #include <ctime>
 #include <fstream>
 #include <unistd.h>
-#include <term.h>
+//#include <term.h>
 #include <time.h>
 
 #include "localgame.h"
