@@ -28,7 +28,7 @@ void OnlineGame::inicjalizujStatki() {
     for(int i = 0; i < 4; i++) mojaPlansza.los1();
     
     cout << "Twoja flota gotowa:\n";
-    mojaPlansza.piszT(); // Używamy Twojej funkcji z plansza.cpp
+    mojaPlansza.piszT();
 }
 
 bool OnlineGame::polacz(string ip, int port) {
@@ -154,7 +154,6 @@ void OnlineGame::uruchom(string ip, int port, string nazwaGracza) {
     cout << "TIP: Wpisz '/wiadomosc' podczas swojej tury, aby czatować!\n";
 
     while (connected) {
-        // Zmienione: pobieramy z kolejki, nie z sieci bezpośrednio
         string cmd = pobierzKomendeGry(); 
         
         if (cmd == "") break; // Koniec gry
