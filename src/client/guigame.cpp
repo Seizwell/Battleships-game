@@ -676,6 +676,11 @@ void GuiGame::processNetworkMessages() {
                 planszaG1.T[x][y] = 8; 
                 setStatus("ZOSTALES TRAFIONY!");
             }
+            else if(planszaG1.T[x][y])
+            {
+                planszaG1.T[x][y] = 7;
+                setStatus("Przeciwnik spudlowal.");
+            }
         }
         else if (cmd == "WIN") { state = GAME_OVER; gameOverMsg = "WYGRALES!"; }
         else if (cmd == "LOSE") { state = GAME_OVER; gameOverMsg = "PRZEGRALES..."; }
