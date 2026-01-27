@@ -119,6 +119,7 @@ void gameSession(int sock1, int sock2) {
                 if (msg == "") {
                     cout << "[MATCH] Gracz " << players[i]->name << " rozlaczyl sie.\n";
                     sendMsg(players[1-i]->socket, "OPPONENT_LEFT");
+                    std::this_thread::sleep_for(std::chrono::seconds(1));
                     gameRunning = false;
                     break;
                 }

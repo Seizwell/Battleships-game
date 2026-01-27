@@ -669,9 +669,9 @@ void GuiGame::processNetworkMessages() {
                 planszaG1.P[x][y] = 7; 
             }
         }
-        else if (cmd.rfind("OPPONNENT_LEFT", 0) == 0) {
+        else if (cmd == "OPPONENT_LEFT") {
             state = GAME_OVER;
-            gameOverMsg = "Przeciwnik uciekł \n Wygrales";
+            gameOverMsg = "Przeciwnik uciekl Wygrales";
         }
         else if (cmd.rfind("OPPONENT_SHOT", 0) == 0) {
             int x, y;
